@@ -1,57 +1,61 @@
-import { useQuery } from "@tanstack/react-query"
-
-import { Button } from "./components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from "./components/ui/card"
-import { Product } from "./types"
-import api from "./api"
-
 import "./App.css"
+import { Dashboard } from "./pages/dashboard"
+import { Home } from "./pages/home"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { Product } from "./types"
+import { useState, createContext } from "react"
+import { ProductDetails } from "./pages/productDetails"
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />
+  },
+  {
+    path: "/Product/:name",
+    element: <ProductDetails />
+  }
+])
+
+type GlobalContextType = {
+  state: GlobalState
+  handleAddtoCart: (product: Product) => void
+  handleDeleteFromCart: (id: string) => void
+}
+type GlobalState = {
+  cart: Product[]
+}
+export const GlobalContext = createContext<GlobalContextType | null>(null)
 
 function App() {
-  const getProducts = async () => {
-    try {
-      const res = await api.get("/products")
-      return res.data
-    } catch (error) {
-      console.error(error)
-      return Promise.reject(new Error("Something went wrong"))
-    }
-  }
-
-  // Queries
-  const { data, error } = useQuery<Product[]>({
-    queryKey: ["products"],
-    queryFn: getProducts
+  const [state, setState] = useState<GlobalState>({
+    cart: []
   })
 
+  const handleAddtoCart = (product: Product) => {
+    const isDuplicated = state.cart.find((cartItem) => cartItem.id === product.id)
+    if (isDuplicated) return
+    setState({
+      ...state,
+      cart: [...state.cart, product]
+    })
+  }
+  const handleDeleteFromCart = (id: string) => {
+    const filterdCart = state.cart.filter((item) => item.id !== id)
+    setState({
+      ...state,
+      cart: filterdCart
+    })
+  }
   return (
-    <div className="App">
-      <h1 className="text-2xl uppercase mb-10">Products</h1>
-
-      <section className="flex flex-col md:flex-row gap-4 justify-between max-w-6xl mx-auto">
-        {data?.map((product) => (
-          <Card key={product.id} className="w-[350px]">
-            <CardHeader>
-              <CardTitle>{product.name}</CardTitle>
-              <CardDescription>Some Description here</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content Here</p>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full">Add to cart</Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </section>
-      {error && <p className="text-red-500">{error.message}</p>}
+    <div>
+      <GlobalContext.Provider value={{ state, handleAddtoCart, handleDeleteFromCart }}>
+        <RouterProvider router={router} />
+      </GlobalContext.Provider>
     </div>
   )
 }
