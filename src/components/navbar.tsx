@@ -13,20 +13,27 @@ export function NavBar() {
       <NavigationMenu>
         <NavigationMenuList className="flex gap-10">
           <NavigationMenuItem className="flex">
-            <Link to="/docs">
+            <Link to="/">
               <NavigationMenuLink className="block">Home</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem className="flex">
-            <Link to="/docs">
+            <Link to="/dashboard">
               <NavigationMenuLink className="block">Dashboard</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem className="flex">
-            <Link to="/docs">
-              <NavigationMenuLink className="block">About us</NavigationMenuLink>
+            <Link to="/signup">
+              <NavigationMenuLink className="block">Signup</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+
+          <NavigationMenuItem className="flex">
+            <Link to="/login">
+              <NavigationMenuLink className="block">Login</NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+
         </NavigationMenuList>
       </NavigationMenu>
       <Cart />

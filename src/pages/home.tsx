@@ -47,9 +47,9 @@ export function Home() {
       <h1 className="text-2xl uppercase mb-10">Products</h1>
       
 
-      <section className="flex flex-col md:flex-row gap-4 justify-center max-w-6xl mx-auto">
+      <section className="flex flex-col md:flex-row gap-4 m-30 justify-center max-w-6xl mx-auto flex-wrap">
         {data?.map((product) => (
-          <Card key={product.id} className="w-[350px] ">
+          <Card key={product.id} className="w-[250px] ">
             <CardHeader>
               <img src={product.image} className="mb-4 h-30 w-56 object-contain " />
               {/* <CardTitle>{product.image}</CardTitle> */}

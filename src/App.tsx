@@ -5,6 +5,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { Product } from "./types"
 import { useState, createContext } from "react"
 import { ProductDetails } from "./pages/productDetails"
+import { LogIn } from "./pages/login"
+import { SignUp } from "./pages/signup"
+import { PrivateRoute } from "./components/privateRoute"
 
 const router = createBrowserRouter([
   {
@@ -12,8 +15,18 @@ const router = createBrowserRouter([
     element: <Home />
   },
   {
+    path: "/login",
+    element: <LogIn/>
+  },{
+    path: "/signup",
+    element: <SignUp/>
+  },
+
+  {
     path: "/dashboard",
-    element: <Dashboard />
+    element:<PrivateRoute>
+      <Dashboard />
+    </PrivateRoute> 
   },
   {
     path: "/Product/:name",
