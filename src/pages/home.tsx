@@ -11,12 +11,18 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { Product } from "@/types"
-import { useQuery } from "@tanstack/react-query"
-import { useContext, useState } from "react"
-import { Link } from "react-router-dom"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { ChangeEvent, FormEvent, useContext, useState } from "react"
+import { Link, useSearchParams } from "react-router-dom"
 
 export function Home() {
+  const[searchParams,setSearchParams]=useSearchParams()
+  const defaultSearch = searchParams.get("searchBy") || ""
+  const [searchBy,setSearchBy]=useState(defaultSearch);
+  const queryClient = useQueryClient()
+  console.log(searchBy,"search")
   const context = useContext(GlobalContext)
   if (!context) throw Error("context is missing")
 
@@ -26,7 +32,7 @@ export function Home() {
 
   const getProducts = async () => {
     try {
-      const res = await api.get("/Product")
+      const res = await api.get(`/Product?Search=${searchBy}`)
       return res.data
     } catch (error) {
       console.error(error)
@@ -39,10 +45,33 @@ export function Home() {
     queryKey: ["products"],
     queryFn: getProducts
   })
-  console.log("data", data)
+
+  
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    setSearchBy(value)
+  
+  }
+  const handleSearch=(e:FormEvent) =>{
+    e.preventDefault()
+    queryClient.invalidateQueries({ queryKey: ["products"] })
+    setSearchParams({
+      ...searchParams,
+      searchBy: searchBy
+    })
+  }
+
+
   return (
     <div className="App">
       <NavBar />
+      <div >
+        <form onSubmit={handleSearch} className=" flex gap-4 w-full md:w-1/2 mx-auto mb-10 mt-10">
+        <Input type="search" placeholder="search for a product" onChange={handleChange} value={searchBy}></Input>
+        <Button type="submit">Search</Button>
+        </form>
+     
+      </div>
       <img src="./images/photo1.png" alt="" width="1534" height="829" />
       <p className="mt-10 mb-10 homephototext">How it works :</p>
 
@@ -132,6 +161,7 @@ export function Home() {
         <Button>Order now !</Button>
       </section>
       <section className="flex flex-col md:flex-row gap-4 m-30 justify-center max-w-6xl mx-auto flex">
+        {data?.length===0&&<p> no product found</p>}
         {data?.map((product) => (
           <Card key={product.id} className="w-[350px] ">
             <CardHeader>
