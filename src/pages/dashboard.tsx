@@ -17,15 +17,17 @@ import { NavBar } from "@/components/navbar"
 
 import { useNavigate } from "react-router-dom"
 import jwtDecode from "jwt-decode"
+import { EditDialog } from "@/components/editDialof"
 
 export function Dashboard() {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
+
   const [product, setProduct] = useState({
     name: "",
+    description: "",
     price: 0,
-    image: "",
-    description: ""
+    image: ""
+    
   })
 
 
@@ -110,6 +112,13 @@ export function Dashboard() {
           className="mt-4"
           onChange={handleChange}
         />
+          <Input
+          name="description"
+          type="text"
+          placeholder="Description"
+          className="mt-4"
+          onChange={handleChange}
+        />
         <Input
           name="price"
           type="number"
@@ -124,13 +133,7 @@ export function Dashboard() {
           className="mt-4"
           onChange={handleChange}
         />
-        <Input
-          name="description"
-          type="text"
-          placeholder="Description"
-          className="mt-4"
-          onChange={handleChange}
-        />
+      
         <div className="flex justify-between">
           <Button type="submit" className="mt-4">
             Submit
@@ -143,22 +146,28 @@ export function Dashboard() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Price</TableHead>
               <TableHead className="text-right">Description</TableHead>
+              <TableHead>Price</TableHead>
+             
               <TableHead className="text-right">Delete</TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {products?.map((product) => (
               <TableRow key={product.name}>
                 <TableCell className="text-left">{product.name}</TableCell>
-                <TableCell className="text-left">{product.price}</TableCell>
                 <TableCell className="text-left">{product.description}</TableCell>
+                <TableCell className="text-left">{product.price}</TableCell>
+               
                 <TableCell className="text-right">
                   <Button variant="destructive" onClick={() => handleDeleteProduct(product.name)}>
                     X
                   </Button>
                 </TableCell>
+                <TableCell className="text-left">
+                <EditDialog product={product} />
+                  </TableCell>
               </TableRow>
             ))}
           </TableBody>

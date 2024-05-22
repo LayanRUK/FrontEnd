@@ -20,7 +20,7 @@ export function Cart() {
     <Popover>
       <PopoverTrigger asChild>
         <div className="flex gap-1">
-        <ShoppingBag color="#273BE2" /> 
+        <ShoppingBag color="#273BE2"/> 
         <span >({state.cart.length})</span>
         </div>
  

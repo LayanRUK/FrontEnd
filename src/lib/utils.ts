@@ -11,3 +11,21 @@ export function getTokenFromStorage() {
 
   return token
 }
+export function reshapeUser(decodedToken:unknown){
+  const decodeUser: any = {}
+  if (decodedToken) {
+    for (const [key, value] of Object.entries(decodedToken)) {
+      console.log("key", key)
+      console.log("value", value)
+      let cleanKey = ""
+      if (key.startsWith("http")) {
+        cleanKey = key.split("identity/claims/")[1]
+      } else {
+        cleanKey = key
+      }
+
+      decodeUser[cleanKey] = value
+    }
+  }
+  return decodeUser
+}

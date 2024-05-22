@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+.homephototext{
+  font-size: 30px;
+}
+.section-background {
+  background-color: #f0f0f0; /* Light grey background color */
+  padding: 20px; /* Optional: Add some padding */
+  border-radius: 8px; /* Optional: Add rounded corners */
+  background-image: url('/path/to/your/image.jpg'); /* Optional: Add background image */
+  background-size: cover; /* Optional: Cover the entire section */
+  background-position: center; /* Optional: Center the background image */
+}
+.flex-container-home {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center items horizontally */
+  gap: 10px;/* Optional: Add space between the text and the image */
+}
