@@ -2,7 +2,7 @@ import api from "@/api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import {
   Table,
   TableBody,
@@ -42,7 +42,7 @@ export function Dashboard() {
 
   // console.log("decodedtoken:", decodedToken)
   // console.log("decodeduser:", decodeUser)
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, valueAsNumber } = e.target
     console.log("{name,value}", { name, value })
     setProduct({
@@ -90,7 +90,7 @@ export function Dashboard() {
       return Promise.reject(new Error("Something went wrong"))
     }
   }
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     await postProduct()
     queryClient.invalidateQueries({ queryKey: ["products"] })
