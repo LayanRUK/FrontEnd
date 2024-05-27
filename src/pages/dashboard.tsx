@@ -19,6 +19,17 @@ import { useNavigate } from "react-router-dom"
 import jwtDecode from "jwt-decode"
 import { EditDialog } from "@/components/editDialof"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog"
 export function Dashboard() {
   const queryClient = useQueryClient()
 
@@ -27,9 +38,7 @@ export function Dashboard() {
     description: "",
     price: 0,
     image: ""
-    
   })
-
 
   // console.log("decodedtoken:", decodedToken)
   // console.log("decodeduser:", decodeUser)
@@ -100,6 +109,22 @@ export function Dashboard() {
     queryFn: getUsers
   })
 
+  const deleteUser = async (name: string) => {
+    try {
+      const res = await api.delete(`/User/${name}`)
+      return res.data
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(new Error("Something went wrong"))
+    }
+  }
+
+  const handleDeleteUser = async (name: string) => {
+    console.log(name)
+    await deleteUser(name)
+
+    queryClient.invalidateQueries({ queryKey: ["users"] })
+  }
   return (
     <div className="App">
       <NavBar />
@@ -112,7 +137,7 @@ export function Dashboard() {
           className="mt-4"
           onChange={handleChange}
         />
-          <Input
+        <Input
           name="description"
           type="text"
           placeholder="Description"
@@ -133,10 +158,10 @@ export function Dashboard() {
           className="mt-4"
           onChange={handleChange}
         />
-      
-        <div className="flex justify-between">
-          <Button type="submit" className="mt-4">
-            Submit
+
+        <div className="flex justify-center">
+          <Button type="submit" className="mt-4 bg-[#E7D4FF] text-[#464646]">
+            Add Product
           </Button>
         </div>
       </form>
@@ -148,7 +173,7 @@ export function Dashboard() {
               <TableHead>Name</TableHead>
               <TableHead className="text-right">Description</TableHead>
               <TableHead>Price</TableHead>
-             
+
               <TableHead className="text-right">Delete</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
@@ -159,19 +184,87 @@ export function Dashboard() {
                 <TableCell className="text-left">{product.name}</TableCell>
                 <TableCell className="text-left">{product.description}</TableCell>
                 <TableCell className="text-left">{product.price}</TableCell>
-               
+
                 <TableCell className="text-right">
-                  <Button variant="destructive" onClick={() => handleDeleteProduct(product.name)}>
-                    X
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Button variant="destructive"> X </Button>{" "}
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will delete the product
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => handleDeleteProduct(product.name)}>
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </TableCell>
+
                 <TableCell className="text-left">
-                <EditDialog product={product} />
-                  </TableCell>
+                  <EditDialog product={product} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        <div>
+          <h1 className="scroll-m-20 text-4xl my-10 font-semibold tracking-tight">Users</h1>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead className="text-right">Email</TableHead>
+                <TableHead>Role</TableHead>
+
+                <TableHead className="text-right">Delete</TableHead>
+                <TableHead className="text-right"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {users?.map((user) => (
+                <TableRow key={user.name}>
+                  <TableCell className="text-left">{user.name}</TableCell>
+                  <TableCell className="text-left">{user.email}</TableCell>
+                  <TableCell className="text-left">{user.role}</TableCell>
+
+                  {/* <TableCell className="text-right">
+                    <Button variant="destructive" onClick={() => handleDeleteUser(user.email)}>
+                      X
+                    </Button>
+                  </TableCell> */}
+                  <TableCell className="text-right">
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Button variant="destructive"> X </Button>{" "}
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will delete the user
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => handleDeleteUser(user.email)}>
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   )
