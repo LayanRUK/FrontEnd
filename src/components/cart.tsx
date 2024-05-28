@@ -138,10 +138,11 @@ export function Cart() {
         <span className="text-2xl font-bold text-[#464646]">{total} SAR</span>
       </div>
     </div>
+    <div className="mt-4 flex justify-end">
+  {state.cart.length > 0 && <Button className= "bg-[#E7D4FF]"onClick={handleCheckoutpage}>Checkout</Button>}
   </div>
-  <div className="mt-4 flex justify-end">
-  {state.cart.length > 0 && <Button onClick={handleCheckoutpage}>Checkout</Button>}
   </div>
+
           
    
       </PopoverContent>
