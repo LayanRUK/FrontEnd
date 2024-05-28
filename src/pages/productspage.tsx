@@ -71,6 +71,17 @@ export function ProductsPage() {
       <br />
       <br />
       <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <div>
         <form
           onSubmit={handleSearch}
