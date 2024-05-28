@@ -171,7 +171,7 @@ export function Dashboard() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead className="text-right">Description</TableHead>
+              <TableHead className="text-left">Description</TableHead>
               <TableHead>Price</TableHead>
 
               <TableHead className="text-right">Delete</TableHead>
@@ -220,7 +220,7 @@ export function Dashboard() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead className="text-right">Email</TableHead>
+                <TableHead className="text-left">Email</TableHead>
                 <TableHead>Role</TableHead>
 
                 <TableHead className="text-right">Delete</TableHead>
